@@ -5,6 +5,7 @@ A lightweight Flask + React app that listens to GitHub webhook events and displa
 ---
 
 ## 📸 Screenshot
+<img width="1123" height="441" alt="Screenshot 2025-07-14 190141" src="https://github.com/user-attachments/assets/7e06214e-d50c-4304-873e-09f8016c208e" />
 
 <!-- Add your<img width="1123" height="441" alt="Screenshot 2025-07-14 190141" src="https://github.com/user-attachments/assets/48b5696c-5467-498f-a114-7d33d54b2824" />
  uploaded images here -->
