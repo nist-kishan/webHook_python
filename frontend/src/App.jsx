@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { GitCommit, GitPullRequest, GitMerge } from "lucide-react";
 
-function App() {
+export default function App() {
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -29,30 +30,51 @@ function App() {
       case "push":
         return `${event.author} pushed to ${event.to_branch} on ${date}`;
       case "pull_request":
-        return `${event.author} submitted a pull request from ${event.from_branch} to ${event.to_branch} on ${date}`;
+        return `${event.author} opened a PR from ${event.from_branch} → ${event.to_branch} on ${date}`;
       case "merge":
-        return `${event.author} merged branch ${event.from_branch} to ${event.to_branch} on ${date}`;
+        return `${event.author} merged ${event.from_branch} → ${event.to_branch} on ${date}`;
       default:
         return "Unknown event";
     }
   };
 
+  const iconFor = (type) => {
+    switch (type) {
+      case "push":
+        return <GitCommit className="w-5 h-5 text-emerald-500" />;
+      case "pull_request":
+        return <GitPullRequest className="w-5 h-5 text-indigo-500" />;
+      case "merge":
+        return <GitMerge className="w-5 h-5 text-fuchsia-600" />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold text-center text-blue-600 mb-8">GitHub Webhook Events</h1>
-      <div className="max-w-2xl mx-auto space-y-4">
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-200 flex flex-col items-center py-10 px-4">
+      <h1 className="text-4xl font-extrabold text-slate-800 mb-10 tracking-tight flex items-center gap-3">
+        <GitCommit className="w-8 h-8 text-blue-600 animate-pulse" />
+        GitHub Webhook Feed
+      </h1>
+
+      <section className="w-full max-w-3xl space-y-4">
         {events.length === 0 ? (
-          <p className="text-gray-500 text-center">No events found.</p>
+          <p className="text-center text-slate-500">No events yet – push something! 🚀</p>
         ) : (
-          events.map((event, index) => (
-            <div key={index} className="bg-white p-4 rounded-xl shadow border border-gray-200">
-              <p className="text-sm text-gray-700">{renderMessage(event)}</p>
-            </div>
+          events.map((evt, i) => (
+            <article
+              key={`${evt.timestamp}-${i}`}
+              className="flex items-start gap-3 p-4 bg-white/90 rounded-2xl shadow-md border border-slate-200 hover:shadow-lg transition-shadow"
+            >
+              {iconFor(evt.event_type)}
+              <p className="text-sm text-slate-700 leading-relaxed">
+                {renderMessage(evt)}
+              </p>
+            </article>
           ))
         )}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
-
-export default App;
